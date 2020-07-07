@@ -43,8 +43,8 @@ type User struct {
 func main() {
 	parseFlags()
 	users := getDeletedUsers()
-	for u := range users {
-		deleteUser(u)
+	for _, ID := range users {
+		deleteUser(ID)
 	}
 }
 
@@ -105,7 +105,26 @@ func getDeletedUsers() (users []int) {
 // and makes a DELETE request to the permadelete endpoint to permanently
 // delete the user's information from Zendesk.
 func deleteUser(ID int) {
-	fmt.Println(ID)
+	url := fmt.Sprintf("https://%s.zendesk.com/api/v2/deleted_users/%d.json", subdomain, ID)
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+	}
+
+	// Use the provided Zendesk credentials
+	req.SetBasicAuth(user, key)
+	var client = &http.Client{}
+
+	// Make the request
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == 200 {
+		fmt.Sprintln("User ID", ID, "Deleted Successfully")
+	} else {
+		fmt.Sprintln("Error in deleting ID", ID, ". Status Code:", resp.StatusCode, resp.Status)
+	}
 
 }
 
