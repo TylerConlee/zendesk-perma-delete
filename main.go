@@ -121,9 +121,9 @@ func deleteUser(ID int) {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode == 200 {
-		fmt.Sprintln("User ID", ID, "Deleted Successfully")
+		fmt.Println("User ID", ID, "Deleted Successfully")
 	} else {
-		fmt.Sprintln("Error in deleting ID", ID, ". Status Code:", resp.StatusCode, resp.Status)
+		fmt.Println("Error in deleting ID", ID, ". Status Code:", resp.StatusCode, resp.Status)
 	}
 
 }
